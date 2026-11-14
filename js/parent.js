@@ -60,12 +60,12 @@ function render(){
     .sort((a, b) => b[1].w - a[1].w || b[1].seen - a[1].seen).slice(0, 15);
   $("#pHard").innerHTML = pm.length
     ? pm.map(([k, s]) => `<li><span>${plusminText(k)}</span><small>${s.last.length ? s.last.map(resultText).join(", ") : "nog geen recente pogingen"}</small></li>`).join("")
-    : "<li>Nog geen moeilijke sommen.</li>";
+    : "<li>Nog geen moeilijke oefeningen.</li>";
 
   $("#pCount").value = state.tempo.count;
   $("#pMin").value = Math.floor(state.tempo.seconds / 60);
   $("#pSec").value = state.tempo.seconds % 60;
-  $("#pPace").textContent = `Dat is ${secs(state.tempo.seconds / state.tempo.count * 1000)} per som. Records gelden per instelling, dus een nieuwe tijd begint een nieuw record.`;
+  $("#pPace").textContent = `Dat is ${secs(state.tempo.seconds / state.tempo.count * 1000)} per oefening. Records gelden per instelling, dus een nieuwe tijd begint een nieuw record.`;
   const recs = Object.values(p.records).sort((a, b) => b.at - a.at);
   $("#pRecords").innerHTML = recs.length
     ? recs.map(r => `<li><span>${esc(r.label)}</span><small>${r.correct} juist, ${r.wrong} fout, ${fmtTime(r.ms)}</small></li>`).join("")

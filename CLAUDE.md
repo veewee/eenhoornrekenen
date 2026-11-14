@@ -7,7 +7,7 @@ Rekenspel als PWA voor een kind in de lagere school, gespeeld op een Android-gsm
 - Geen framework, geen bundler, geen npm-dependencies in de app. Wel ES-modules als losse bestanden.
 - Volledig offline na de eerste keer openen. Elk nieuw bestand moet in `SHELL` in `sw.js`, en `tests/sw.test.js` controleert dat voor `js/`.
 - Look behouden: Baloo 2, regenboog, pastelkleuren met light en dark mode, cijferklavier, geluid, confetti. Het gedrag van de zeven bestaande niveaus blijft gelijk.
-- Alle tekst in het Nederlands (Vlaams) en kindvriendelijk, geen em dashes. Delen schrijf je met ":", vermenigvuldigen met "×", min met U+2212.
+- Alle tekst in het Nederlands (Vlaams) en kindvriendelijk, geen em dashes. Een opgave heet "oefening", niet "som". Delen schrijf je met ":", vermenigvuldigen met "×", min met U+2212.
 - Respecteer prefers-reduced-motion, zorg voor zichtbare focus en tikvlakken van minstens 48px.
 
 ## Structuur

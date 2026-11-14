@@ -40,9 +40,9 @@ function tempoSet(){
       <button class="step" data-k="${k}" data-d="1" aria-label="${more}" ${v >= max ? "disabled" : ""}>+</button></div>`;
   };
   const pace = (seconds / count).toFixed(1).replace(".", ",").replace(",0", "");
-  return row("count", "Sommen", count, "Minder sommen", "Meer sommen")
+  return row("count", "Oefeningen", count, "Minder oefeningen", "Meer oefeningen")
     + row("seconds", "Tijd", fmtTime(seconds * 1000), "Minder tijd", "Meer tijd")
-    + `<p class="note">Dat is ${pace} seconden per som. Geen hulp, zo vlot als je kan!</p>`;
+    + `<p class="note">Dat is ${pace} seconden per oefening. Geen hulp, zo vlot als je kan!</p>`;
 }
 
 /* kiezen en naam */
