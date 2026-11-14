@@ -2,7 +2,7 @@
 const CACHE = "eenhoorn-__BUILD__";
 const SHELL = [
   "./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-180.png",
-  "./js/app.js", "./js/core.js", "./js/world-plusmin.js", "./js/world-tafels.js", "./js/parent.js"
+  "./js/app.js", "./js/core.js", "./js/world-plusmin.js", "./js/world-tafels.js", "./js/parent.js", "./js/rewards.js"
 ];
 // cache: "reload" skips the HTTP cache, otherwise a new worker can store the previous deploy's files.
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL.map(u => new Request(u, {cache: "reload"}))))); self.skipWaiting(); });

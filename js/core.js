@@ -26,6 +26,7 @@ export function emptyState(){
 export function newPlayer(name = "Speler 1", id = "p" + Date.now().toString(36) + Math.floor(Math.random() * 1e4)){
   return {
     id, name, needsName: false, unicorns: 1, pick: 0, rounds: 0, crown: false, badges: {}, records: {},
+    glitters: 0, closet: {}, outfits: {}, dry: 0,
     worlds: {
       plusmin: { mode: "oefenen", len: 10, best: {}, stats: {} },
       tafels: { mode: "oefenen", len: 10, settings: { tables: [2, 10], ops: "x" }, stats: {} }
@@ -43,9 +44,15 @@ function normalizePlayer(p){
   for (const w of ["plusmin", "tafels"]) out.worlds[w] = Object.assign(newPlayer().worlds[w], isObj(out.worlds[w]) ? out.worlds[w] : {});
   const { tables, ops } = Object.assign(newPlayer().worlds.tafels.settings, out.worlds.tafels.settings);
   out.worlds.tafels.settings = { tables, ops };
-  for (const k of ["badges", "records"]) if (!isObj(out[k])) out[k] = {};
+  for (const k of ["badges", "records", "closet", "outfits"]) if (!isObj(out[k])) out[k] = {};
+  for (const k of ["glitters", "dry"]) out[k] = Math.max(0, Math.floor(+out[k]) || 0);
   out.unicorns = Math.max(1, Math.min(UNI.length, Math.floor(+out.unicorns) || 1));
   out.pick = Math.max(0, Math.min(out.unicorns - 1, Math.floor(+out.pick) || 0));
+  // The crown used to be a fixed layer on every unicorn; it is now a head item, worn wherever nothing else is.
+  if (out.crown === true && !out.closet.kroon){
+    out.closet.kroon = Date.now();
+    for (let i = 0; i < out.unicorns; i++){ const o = out.outfits[i] || (out.outfits[i] = {}); if (!o.hoofd) o.hoofd = "kroon"; }
+  }
   return out;
 }
 
@@ -56,6 +63,11 @@ function normalize(s){
   if (!st.players.length){ const p = newPlayer(); p.needsName = true; st.players.push(p); }
   if (!st.players.some(p => p.id === st.activePlayer)) st.activePlayer = st.players[0].id;
   return st;
+}
+
+// Clears play progress but keeps what was earned to spend: glitters, closet and outfits.
+export function resetProgress(p){
+  return Object.assign(newPlayer(p.name, p.id), { glitters: p.glitters, closet: p.closet, outfits: p.outfits });
 }
 
 export function migrateV1(v1){
