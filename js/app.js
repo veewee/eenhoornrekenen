@@ -92,6 +92,8 @@ function renderHome(){
   const badges = Object.keys(p.badges).sort((a, b) => a.slice(1) - b.slice(1) || a.localeCompare(b));
   $("#badges").innerHTML = badges.map(k => `<span class="badge">${badgeLabel(k)}</span>`).join("");
   $("#switchPlayer").hidden = state.players.length < 2;
+  $("#whoName").textContent = p.name;
+  $("#switchPlayer").setAttribute("aria-label", `Andere speler kiezen, nu speelt ${p.name}`);
 }
 function goHome(){ renderHome(); showScreen("home"); }
 
