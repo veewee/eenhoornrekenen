@@ -4,19 +4,16 @@ export const TABLES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const NS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const MINUS = "−";
 
-function mul(a, b, n, t){ return { key: `${a}x${b}`, a, op: "x", b, c: a * b, hide: "c", w: 1, n, t }; }
+function mul(n, t){ return { key: `${n}x${t}`, a: n, op: "x", b: t, c: n * t, hide: "c", w: 1, n, t }; }
 function div(n, t){ return { key: `${n * t}:${t}`, a: n * t, op: ":", b: t, c: n, hide: "c", w: 1, n, t }; }
 
-/* settings: {tables: number[], ops: "x" | ":" | "x:", reverse: boolean} */
+/* settings: {tables: number[], ops: "x" | ":" | "x:"} */
 export function tafelFacts(settings){
   const out = new Map();
   const add = f => { if (!out.has(f.key)) out.set(f.key, f); };
   for (const t of settings.tables){
     for (const n of NS){
-      if (settings.ops.includes("x")){
-        add(mul(n, t, n, t));
-        if (settings.reverse) add(mul(t, n, n, t));
-      }
+      if (settings.ops.includes("x")) add(mul(n, t));
       if (settings.ops.includes(":") && t > 0) add(div(n, t));
     }
   }
@@ -58,7 +55,7 @@ export function helpTafels(f){
   html += "</div>";
   let hint;
   if (f.op === ":") hint = `Hoeveel keer ${f.t} is ${f.a}?`;
-  else hint = (f.a !== f.n ? `Draai om: ${f.n} × ${f.t}. ` : "") + mulHint(f.n, f.t);
+  else hint = mulHint(f.n, f.t);
   return html + `<p class="hint">${hint}</p>`;
 }
 

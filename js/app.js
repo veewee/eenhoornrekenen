@@ -25,8 +25,24 @@ function showScreen(id){ SCREENS.forEach(s => $("#" + s).hidden = s !== id); scr
 function starStr(n){ return "★".repeat(n) + "<i>" + "★".repeat(3 - n) + "</i>"; }
 function badgeLabel(k){ return `👑 ${k.slice(1)} ${k[0] === "x" ? "×" : ":"}`; }
 function opsLabel(ops){ return OPS.find(o => o[0] === ops)[1]; }
-function tempoNote(){
-  return `Tempo: ${state.tempo.count} sommen in ${fmtTime(state.tempo.seconds * 1000)}. Geen hulp, zo vlot als je kan!`;
+const SVG = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">';
+const SOUND_ON = SVG + '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+const SOUND_OFF = SVG + '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></svg>';
+const TEMPO_LIMITS = { count: [5, 200, 5], seconds: [30, 3600, 30] };
+
+function tempoSet(){
+  const { count, seconds } = state.tempo;
+  const row = (k, label, value, less, more) => {
+    const [min, max] = TEMPO_LIMITS[k], v = state.tempo[k];
+    return `<div class="stepper"><b>${label}</b>
+      <button class="step" data-k="${k}" data-d="-1" aria-label="${less}" ${v <= min ? "disabled" : ""}>&minus;</button>
+      <output aria-live="polite">${value}</output>
+      <button class="step" data-k="${k}" data-d="1" aria-label="${more}" ${v >= max ? "disabled" : ""}>+</button></div>`;
+  };
+  const pace = (seconds / count).toFixed(1).replace(".", ",").replace(",0", "");
+  return row("count", "Sommen", count, "Minder sommen", "Meer sommen")
+    + row("seconds", "Tijd", fmtTime(seconds * 1000), "Minder tijd", "Meer tijd")
+    + `<p class="note">Dat is ${pace} seconden per som. Geen hulp, zo vlot als je kan!</p>`;
 }
 
 /* kiezen en naam */
@@ -60,7 +76,8 @@ function enter(){ if (player().needsName) askName(); else goHome(); }
 
 function renderHome(){
   const p = player();
-  $("#sound").textContent = state.sound ? "🔊" : "🔇";
+  $("#sound").innerHTML = state.sound ? SOUND_ON : SOUND_OFF;
+  $("#sound").setAttribute("aria-pressed", state.sound);
   $("#heroFace").style.filter = UNI[p.pick][1];
   $("#heroUni").classList.toggle("crowned", p.crown);
   $("#hello").textContent = `Hoi ${p.name}! Breng je eenhoorn naar het kasteel en verzamel ze allemaal!`;
@@ -89,15 +106,21 @@ $$("[data-back]").forEach(b => b.addEventListener("click", goHome));
 
 // Two seconds of holding keeps small fingers out of the parent screen.
 const gear = $("#gear");
-let holdTimer = null;
+let holdTimer = null, hintTimer = null;
 function startHold(){
   if (holdTimer) return;
   gear.classList.add("holding");
-  holdTimer = setTimeout(() => { endHold(); openParent(); }, 2000);
+  holdTimer = setTimeout(() => { holdTimer = null; endHold(); openParent(); }, 2000);
 }
-function endHold(){ clearTimeout(holdTimer); holdTimer = null; gear.classList.remove("holding"); }
-gear.addEventListener("pointerdown", e => { e.preventDefault(); startHold(); });
-["pointerup", "pointerleave", "pointercancel"].forEach(t => gear.addEventListener(t, endHold));
+function endHold(){
+  if (holdTimer){
+    $("#gearHint").textContent = "Hou 2 seconden ingedrukt";
+    clearTimeout(hintTimer); hintTimer = setTimeout(() => $("#gearHint").textContent = "", 2500);
+  }
+  clearTimeout(holdTimer); holdTimer = null; gear.classList.remove("holding");
+}
+gear.addEventListener("pointerdown", e => { e.preventDefault(); gear.setPointerCapture(e.pointerId); startHold(); });
+["pointerup", "pointercancel"].forEach(t => gear.addEventListener(t, endHold));
 gear.addEventListener("contextmenu", e => e.preventDefault());
 gear.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && !e.repeat){ e.preventDefault(); startHold(); } });
 gear.addEventListener("keyup", e => { if (e.key === "Enter" || e.key === " ") endHold(); });
@@ -110,12 +133,21 @@ function renderModes(worldId){
     `<button class="chip" data-mode="${m}" aria-pressed="${ws.mode === m}">${t}</button>`).join("");
   sec.querySelector("[data-practice]").hidden = tempo;
   sec.querySelector("[data-tempo]").hidden = !tempo;
-  sec.querySelector("[data-tempo]").textContent = tempoNote();
+  sec.querySelector("[data-tempo]").innerHTML = tempoSet();
   sec.querySelector(".lens").innerHTML = [10, 15, 20].map(n => `<button class="len" data-n="${n}" aria-pressed="${ws.len === n}">${n}</button>`).join("");
 }
 $$(".modes").forEach(el => el.addEventListener("click", e => {
   const b = e.target.closest(".chip"); if (!b) return;
   player().worlds[el.dataset.world].mode = b.dataset.mode; persist(); sfx("tap"); openWorld(el.dataset.world, true);
+}));
+$$("[data-tempo]").forEach(el => el.addEventListener("click", e => {
+  const b = e.target.closest(".step"); if (!b) return;
+  const [min, max, step] = TEMPO_LIMITS[b.dataset.k];
+  state.tempo[b.dataset.k] = Math.max(min, Math.min(max, state.tempo[b.dataset.k] + step * b.dataset.d));
+  persist(); sfx("tap");
+  el.innerHTML = tempoSet();
+  const same = el.querySelector(`.step[data-k="${b.dataset.k}"][data-d="${b.dataset.d}"]`);
+  if (same && !same.disabled) same.focus();
 }));
 $$(".lens").forEach(el => el.addEventListener("click", e => {
   const b = e.target.closest(".len"); if (!b) return;
@@ -142,23 +174,20 @@ function renderTafels(){
   $("#tables").innerHTML = TABLES.map(t => {
     const crowns = ["x", ":"].filter(op => p.badges[op + t]).map(op => op === "x" ? "×" : ":").join("");
     return `<button class="tbl" data-t="${t}" aria-pressed="${s.tables.includes(t)}" aria-label="Tafel van ${t}${crowns ? ", kroontje" : ""}">${t}${crowns ? `<small aria-hidden="true">👑${crowns}</small>` : ""}</button>`;
-  }).join("");
+  }).join("") + `<button class="tbl all" data-t="all" aria-pressed="${s.tables.length === TABLES.length}">Alle</button>`;
   $("#ops").innerHTML = OPS.map(([o, t]) => `<button class="chip" data-op="${o}" aria-pressed="${s.ops === o}">${t}</button>`).join("");
-  $("#reverse").setAttribute("aria-checked", s.reverse);
   $("#goTafels").disabled = tafels.facts(s).length === 0;
 }
 $("#tables").addEventListener("click", e => {
   const b = e.target.closest(".tbl"); if (!b) return;
   const s = player().worlds.tafels.settings, t = +b.dataset.t;
-  s.tables = s.tables.includes(t) ? s.tables.filter(x => x !== t) : [...s.tables, t].sort((a, c) => a - c);
+  if (b.dataset.t === "all") s.tables = s.tables.length === TABLES.length ? [] : TABLES.slice();
+  else s.tables = s.tables.includes(t) ? s.tables.filter(x => x !== t) : [...s.tables, t].sort((a, c) => a - c);
   persist(); sfx("tap"); renderTafels();
 });
 $("#ops").addEventListener("click", e => {
   const b = e.target.closest(".chip"); if (!b) return;
   player().worlds.tafels.settings.ops = b.dataset.op; persist(); sfx("tap"); renderTafels();
-});
-$("#reverse").addEventListener("click", () => {
-  const s = player().worlds.tafels.settings; s.reverse = !s.reverse; persist(); sfx("tap"); renderTafels();
 });
 $("#goTafels").addEventListener("click", () => play("tafels", { ...player().worlds.tafels.settings }));
 
@@ -184,7 +213,7 @@ function play(worldId, cfg){
 function recordLabel(l){
   const base = l.worldId === "plusmin"
     ? `Plus en min: ${LEVELS.find(x => x.id === l.cfg.level).name}`
-    : `Tafels ${l.cfg.tables.join(", ")}, ${opsLabel(l.cfg.ops)}${l.cfg.reverse ? ", ook omgekeerd" : ""}`;
+    : `Tafels ${l.cfg.tables.join(", ")}, ${opsLabel(l.cfg.ops)}`;
   return `${base} (${l.count} in ${fmtTime(l.seconds * 1000)})`;
 }
 
@@ -203,7 +232,7 @@ function finish(res){
   let party = false, shownUni = p.pick, title, stats, missed, missedTitle;
 
   if (res.mode === "tempo"){
-    const key = tempoKey({ world: l.worldId, level: l.cfg.level, tables: l.cfg.tables, ops: l.cfg.ops, reverse: l.cfg.reverse, count: l.count, seconds: l.seconds });
+    const key = tempoKey({ world: l.worldId, level: l.cfg.level, tables: l.cfg.tables, ops: l.cfg.ops, count: l.count, seconds: l.seconds });
     const rec = p.records[key];
     const result = { correct: res.correct, wrong: res.wrong, ms: res.ms };
     title = res.timedOut ? "De tijd is om!" : "Klaar!";

@@ -28,7 +28,7 @@ export function newPlayer(name = "Speler 1", id = "p" + Date.now().toString(36) 
     id, name, needsName: false, unicorns: 1, pick: 0, rounds: 0, crown: false, badges: {}, records: {},
     worlds: {
       plusmin: { mode: "oefenen", len: 10, best: {}, stats: {} },
-      tafels: { mode: "oefenen", len: 10, settings: { tables: [2, 10], ops: "x", reverse: false }, stats: {} }
+      tafels: { mode: "oefenen", len: 10, settings: { tables: [2, 10], ops: "x" }, stats: {} }
     }
   };
 }
@@ -41,7 +41,8 @@ function normalizePlayer(p){
   const out = Object.assign(d, p);
   out.worlds = isObj(p.worlds) ? p.worlds : {};
   for (const w of ["plusmin", "tafels"]) out.worlds[w] = Object.assign(newPlayer().worlds[w], isObj(out.worlds[w]) ? out.worlds[w] : {});
-  out.worlds.tafels.settings = Object.assign(newPlayer().worlds.tafels.settings, out.worlds.tafels.settings);
+  const { tables, ops } = Object.assign(newPlayer().worlds.tafels.settings, out.worlds.tafels.settings);
+  out.worlds.tafels.settings = { tables, ops };
   for (const k of ["badges", "records"]) if (!isObj(out[k])) out[k] = {};
   out.unicorns = Math.max(1, Math.min(UNI.length, Math.floor(+out.unicorns) || 1));
   out.pick = Math.max(0, Math.min(out.unicorns - 1, Math.floor(+out.pick) || 0));
@@ -145,7 +146,7 @@ export function tempoQueue(facts, n, rand = Math.random){
 
 export function tempoKey(c){
   const parts = [c.world];
-  if (c.world === "tafels") parts.push([...c.tables].sort((a, b) => a - b).join("."), c.ops, c.reverse ? "om" : "");
+  if (c.world === "tafels") parts.push([...c.tables].sort((a, b) => a - b).join("."), c.ops);
   else parts.push(c.level);
   parts.push(c.count, c.seconds);
   return parts.join("|");

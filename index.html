@@ -158,7 +158,9 @@ input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-o
 .top .grow{flex:1}
 .round{width:48px;height:48px;border-radius:50%;background:var(--card);border:3px solid var(--card-edge);font-size:1.4rem;display:grid;place-items:center;flex:none}
 .sound{display:grid;place-items:center}
-.gear{position:relative;overflow:hidden}
+.ico{width:26px;height:26px;fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;position:relative;z-index:1}
+.gear{position:relative;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+.gear-hint{font-weight:700;color:var(--ink-soft);font-size:1rem}
 .gear::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--lilac);opacity:.45;transform:scale(0)}
 .gear.holding::after{transform:scale(1);transition:transform 2s linear}
 .crowned{position:relative}
@@ -190,9 +192,21 @@ input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-o
 .switch-player{margin-top:16px}
 
 /* tafels */
-.tables{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:8px}
-.tbl{min-height:56px;border-radius:16px;background:var(--card);border:3px solid var(--card-edge);font-size:1.5rem;font-weight:800;position:relative;line-height:1}
-.tbl[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.tables{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+@media (max-width:359px){.tables{grid-template-columns:repeat(4,1fr)}}
+.tbl{min-height:60px;border-radius:18px;background:var(--key);color:var(--key-ink);border:3px solid var(--key-edge);box-shadow:0 4px 0 var(--key-edge);
+  font-size:1.6rem;font-weight:800;position:relative;line-height:1}
+.tbl:active{transform:translateY(3px);box-shadow:0 1px 0 var(--key-edge)}
+.tbl[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 0 #2a7fd6}
+.tbl.all{font-size:1.05rem}
+.tempo-set{margin-top:18px;background:var(--card);border:3px solid var(--card-edge);border-radius:20px;padding:10px 14px}
+.stepper{display:flex;align-items:center;gap:10px;padding:4px 0}
+.stepper b{flex:1;font-size:1.15rem}
+.stepper output{min-width:4.2ch;text-align:center;font-size:1.5rem;font-weight:800}
+.step{width:48px;height:48px;border-radius:50%;background:var(--key);border:3px solid var(--key-edge);box-shadow:0 3px 0 var(--key-edge);font-size:1.6rem;font-weight:800;line-height:1}
+.step:active{transform:translateY(2px);box-shadow:0 1px 0 var(--key-edge)}
+.step:disabled{opacity:.35}
+.tempo-set .note{margin:4px 0 2px}
 .tbl small{position:absolute;right:2px;top:-8px;font-size:.75rem;line-height:1;background:var(--sun);color:#3B1C6B;border-radius:8px;padding:2px 4px}
 .toggle{display:flex;align-items:center;gap:12px;min-height:52px;margin-top:12px;padding:6px 14px;border-radius:16px;background:var(--card);border:3px solid var(--card-edge);font-size:1.2rem;font-weight:700;width:100%;text-align:left}
 .toggle .box{width:30px;height:30px;border-radius:9px;border:3px solid var(--card-edge);display:grid;place-items:center;flex:none}
@@ -249,6 +263,11 @@ input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-o
   .runner,.timefill{transition:none}
   .gear.holding::after{transition:none;transform:scale(.6)}
 }
+@media (min-width:768px) and (min-height:760px){
+  main{max-width:640px;padding-top:28px}
+  .key{min-height:76px;font-size:2.3rem}
+  .world{min-height:150px}
+}
 @media (max-height:700px){
   .key{min-height:54px;font-size:1.7rem}
   .card{padding:12px 10px 10px}
@@ -276,9 +295,9 @@ input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-o
 
 <section id="home" hidden>
   <div class="top">
-    <button class="round gear" id="gear" aria-label="Ouders: hou 2 seconden ingedrukt">⚙️</button>
-    <span class="grow"></span>
-    <button class="sound round" id="sound" aria-label="Geluid aan of uit">🔊</button>
+    <button class="round gear" id="gear" aria-label="Ouders: hou 2 seconden ingedrukt" aria-describedby="gearHint"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
+    <span class="grow gear-hint" id="gearHint" aria-live="polite"></span>
+    <button class="sound round" id="sound" aria-label="Geluid aan of uit"></button>
   </div>
   <div class="hero"><span class="big" id="heroUni"><span id="heroFace">🦄</span></span><h1>Eenhoornrekenen</h1></div>
   <p class="lead" id="hello">Breng je eenhoorn naar het kasteel en verzamel ze allemaal!</p>
@@ -305,7 +324,7 @@ input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-o
     <h2>Hoeveel sommen?</h2>
     <div class="lens" data-world="plusmin"></div>
   </div>
-  <p class="note" data-tempo></p>
+  <div class="tempo-set" data-tempo data-world="plusmin"></div>
 </section>
 
 <section id="tafels" hidden>
@@ -316,12 +335,11 @@ input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-o
   <div class="tables" id="tables"></div>
   <h2>Maal of delen?</h2>
   <div class="chips" id="ops"></div>
-  <button class="toggle" id="reverse" role="switch" aria-checked="false"><span class="box">✓</span>Ook omgekeerd, zoals 2 × 7</button>
   <div data-practice>
     <h2>Hoeveel sommen?</h2>
     <div class="lens" data-world="tafels"></div>
   </div>
-  <p class="note" data-tempo></p>
+  <div class="tempo-set" data-tempo data-world="tafels"></div>
   <button class="btn go-btn" id="goTafels">Start!</button>
 </section>
 

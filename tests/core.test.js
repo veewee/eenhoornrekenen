@@ -64,7 +64,7 @@ test("zonder opslag of met kapotte opslag krijg je een correcte lege start", () 
     assert.equal(s.players[0].unicorns, 1);
     assert.equal(s.players[0].needsName, true);
     assert.equal(s.activePlayer, s.players[0].id);
-    assert.deepEqual(s.players[0].worlds.tafels.settings, { tables: [2, 10], ops: "x", reverse: false });
+    assert.deepEqual(s.players[0].worlds.tafels.settings, { tables: [2, 10], ops: "x" });
   }
   assert.doesNotThrow(() => saveState({ setItem() { throw new Error("vol"); } }, emptyState()));
 });
@@ -120,9 +120,9 @@ test("tempowachtrij is evenwichtig gespreid en herhaalt nooit direct", () => {
 });
 
 test("tempo-sleutel hangt af van exact de instelling", () => {
-  const base = { world: "tafels", tables: [10, 2], ops: "x", reverse: false, count: 60, seconds: 900 };
+  const base = { world: "tafels", tables: [10, 2], ops: "x", count: 60, seconds: 900 };
   assert.equal(tempoKey(base), tempoKey({ ...base, tables: [2, 10] }));
-  for (const d of [{ tables: [2] }, { ops: "x:" }, { reverse: true }, { count: 40 }, { seconds: 600 }])
+  for (const d of [{ tables: [2] }, { ops: "x:" }, { count: 40 }, { seconds: 600 }])
     assert.notEqual(tempoKey(base), tempoKey({ ...base, ...d }));
   assert.notEqual(tempoKey({ world: "plusmin", level: "p10", count: 60, seconds: 900 }),
                   tempoKey({ world: "plusmin", level: "m10", count: 60, seconds: 900 }));

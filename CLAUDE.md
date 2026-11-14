@@ -27,7 +27,7 @@ Sleutel `eenhoornrekenen:v2`:
      players: [{id, name, needsName, unicorns, pick, rounds, crown, badges, records,
                 worlds: {plusmin: {mode, len, best, stats}, tafels: {mode, len, settings, stats}}}]}
 
-`stats[factKey] = {seen, last: [{ok, ms}] (max 3), w}`. Het gewicht `w` (0 tot 5) gaat +2 bij fout, +1 bij juist boven 5 s, -1 bij juist onder 3 s. Een tafel is per bewerking geautomatiseerd als elk feit de laatste 2 pogingen juist had, elk onder 3 s. Records hangen aan `tempoKey` (wereld, niveau of tafels, bewerkingen, omgekeerd, aantal, tijd).
+`stats[factKey] = {seen, last: [{ok, ms}] (max 3), w}`. Het gewicht `w` (0 tot 5) gaat +2 bij fout, +1 bij juist boven 5 s, -1 bij juist onder 3 s. Een tafel is per bewerking geautomatiseerd als elk feit de laatste 2 pogingen juist had, elk onder 3 s. Records hangen aan `tempoKey` (wereld, niveau of tafels, bewerkingen, aantal, tijd).
 
 Migratie: bestaat v2 niet maar v1 (`eenhoornrekenen:v1`) wel, dan wordt v1 de eerste speler (naam wordt gevraagd, standaard "Speler 1") en worden de hard-gewichten per niveau omgezet naar het hoogste gewicht per feit. v1 blijft staan als back-up. Verander het schema nooit zonder versie op te hogen en een migratie met test toe te voegen.
 
