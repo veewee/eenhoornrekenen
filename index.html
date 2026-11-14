@@ -88,7 +88,7 @@ h2{font-size:1.3rem;margin:18px 0 8px;font-weight:800}
 .lens{display:flex;gap:10px}
 .len{flex:1;padding:10px 0;font-size:1.4rem;font-weight:800;border-radius:16px;background:var(--card);border:3px solid var(--card-edge)}
 .len[aria-pressed="true"]{background:var(--pink);border-color:var(--pink);color:#fff}
-.stable{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.stable{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:6px}
 .uni{aspect-ratio:1;border-radius:16px;background:var(--card);border:3px solid var(--card-edge);font-size:1.9rem;display:grid;place-items:center;position:relative}
 .uni.locked span{filter:grayscale(1) brightness(0);opacity:.18}
 .uni[aria-pressed="true"]{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink)}
@@ -96,7 +96,7 @@ h2{font-size:1.3rem;margin:18px 0 8px;font-weight:800}
 
 /* play */
 .bar{display:flex;align-items:center;gap:10px}
-.stop{width:44px;height:44px;border-radius:50%;background:var(--card);border:3px solid var(--card-edge);font-size:1.2rem;font-weight:800;flex:none}
+.stop{width:48px;height:48px;border-radius:50%;background:var(--card);border:3px solid var(--card-edge);font-size:1.2rem;font-weight:800;flex:none}
 .track{position:relative;flex:1;height:56px}
 .rainbow{position:absolute;left:0;right:0;top:30px;height:12px;border-radius:8px;
   background:linear-gradient(90deg,var(--pink),var(--sun),var(--mint),var(--blue),var(--lilac));opacity:.85}
@@ -190,7 +190,7 @@ input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-o
 .switch-player{margin-top:16px}
 
 /* tafels */
-.tables{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.tables{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:8px}
 .tbl{min-height:56px;border-radius:16px;background:var(--card);border:3px solid var(--card-edge);font-size:1.5rem;font-weight:800;position:relative;line-height:1}
 .tbl[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
 .tbl small{position:absolute;right:2px;top:-8px;font-size:.75rem;line-height:1;background:var(--sun);color:#3B1C6B;border-radius:8px;padding:2px 4px}

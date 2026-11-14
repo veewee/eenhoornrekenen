@@ -43,6 +43,8 @@ function normalizePlayer(p){
   for (const w of ["plusmin", "tafels"]) out.worlds[w] = Object.assign(newPlayer().worlds[w], isObj(out.worlds[w]) ? out.worlds[w] : {});
   out.worlds.tafels.settings = Object.assign(newPlayer().worlds.tafels.settings, out.worlds.tafels.settings);
   for (const k of ["badges", "records"]) if (!isObj(out[k])) out[k] = {};
+  out.unicorns = Math.max(1, Math.min(UNI.length, Math.floor(+out.unicorns) || 1));
+  out.pick = Math.max(0, Math.min(out.unicorns - 1, Math.floor(+out.pick) || 0));
   return out;
 }
 
@@ -264,8 +266,8 @@ export function startSession(opts){
     maxDigits: String(Math.max(...opts.queue.map(f => f[f.hide]))).length
   });
   $("#play").classList.toggle("tempo", tempo);
-  $("#runner").style.filter = opts.filter;
-  $("#rider").classList.toggle("crowned", !!opts.crown);
+  $("#riderUni").style.filter = opts.filter;
+  $("#runner").classList.toggle("crowned", !!opts.crown);
   $("#streak").textContent = "";
   if (tempo){
     S.endsAt = S.startedAt + opts.seconds * 1000;
@@ -282,6 +284,7 @@ function updateClock(){
   const left = Math.max(0, S.endsAt - performance.now());
   $("#timefill").style.width = (left / (S.seconds * 1000) * 100) + "%";
   $("#timebar").setAttribute("aria-valuenow", Math.ceil(left / 1000));
+  $("#timebar").setAttribute("aria-valuemax", S.seconds);
   $("#timeleft").textContent = fmtTime(left);
   if (left <= 0) finish(true);
 }

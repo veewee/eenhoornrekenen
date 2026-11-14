@@ -10,6 +10,7 @@ let ctx, viewId = null, gridOp = "x";
 const viewed = () => ctx.state.players.find(p => p.id === viewId) || ctx.state.players[0];
 const secs = ms => (ms / 1000).toFixed(1).replace(".", ",") + " s";
 const resultText = r => `${r.ok ? "juist" : "fout"} in ${secs(r.ms)}`;
+const STATUS_WORD = { vlot: "vlot", traag: "traag", fout: "fout", nog: "nog niet geoefend" };
 
 function status(st){
   const r = st && st.last[st.last.length - 1];
@@ -27,7 +28,7 @@ function confirmTap(btn, label, action){
 
 function plusminText(key){
   const m = /^(\d+)([+-])(\d+)[bc]$/.exec(key);
-  if (!m) return key;
+  if (!m) return esc(key);
   const a = +m[1], b = +m[3];
   return `${a} ${SYM[m[2]]} ${b} = ${m[2] === "+" ? a + b : a - b}`;
 }
@@ -48,7 +49,8 @@ function render(){
       if (gridOp === ":" && t === 0){ g += '<span class="none"></span>'; continue; }
       const key = gridOp === "x" ? `${n}x${t}` : `${n * t}:${t}`;
       const label = gridOp === "x" ? `${n} × ${t}` : `${n * t} : ${t}`;
-      g += `<button class="${status(st[key])}" data-key="${key}" data-label="${label}" aria-label="${label}">${gridOp === "x" ? n * t : n}</button>`;
+      const s = status(st[key]);
+      g += `<button class="${s}" data-key="${key}" data-label="${label}" aria-label="${label}: ${STATUS_WORD[s]}">${gridOp === "x" ? n * t : n}</button>`;
     }
   }
   $("#pGrid").innerHTML = g;

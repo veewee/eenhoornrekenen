@@ -69,6 +69,14 @@ test("zonder opslag of met kapotte opslag krijg je een correcte lege start", () 
   assert.doesNotThrow(() => saveState({ setItem() { throw new Error("vol"); } }, emptyState()));
 });
 
+test("rijder en stal blijven binnen de bestaande eenhoorns", () => {
+  const v2 = migrateV1(V1);
+  Object.assign(v2.players[0], { unicorns: 99, pick: 42 });
+  const p = loadState(memoryStorage({ [KEY_V2]: JSON.stringify(v2) })).players[0];
+  assert.equal(p.unicorns, 12);
+  assert.equal(p.pick, 11);
+});
+
 test("gewicht stijgt bij fout of traag, daalt bij juist en snel, blijft binnen grenzen", () => {
   const st = {};
   recordAttempt(st, "k", false, 2000);
