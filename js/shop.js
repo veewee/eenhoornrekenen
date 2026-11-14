@@ -8,7 +8,6 @@ let ctx, armed = null, armTimer = null;
 function render(){
   const p = ctx.player(), o = p.outfits[p.pick] || {};
   $("#purse").textContent = `✨ ${p.glitters}`;
-  $("#purse").setAttribute("aria-label", `Je hebt ${p.glitters} glitters`);
   $("#shopUni").innerHTML = uniHTML(p, p.pick);
   $("#shopWho").textContent = `Je kleedt ${UNI[p.pick][0]} aan.`;
   $("#shopPick").innerHTML = UNI.slice(0, p.unicorns).map((u, i) =>

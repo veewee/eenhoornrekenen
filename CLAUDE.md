@@ -17,6 +17,8 @@ Rekenspel als PWA voor een kind in de lagere school, gespeeld op een Android-gsm
 - `js/world-plusmin.js`, `js/world-tafels.js`: een wereld levert `facts(config)`, `help(fact)` (HTML bij een fout) en per feit een `key`. Plus en min heeft daarnaast `LEVELS`.
 - `js/app.js`: schermen en verloop (spelers, startscherm, werelden, eindscherm, badges, records).
 - `js/parent.js`: ouderscherm, open door het tandwiel 2 seconden in te drukken.
+- `js/rewards.js`: glitters, kans op een nieuwe eenhoorn, catalogus van spulletjes, kopen en aankleden, `uniHTML` (tekent een eenhoorn met outfit). Puur, zonder DOM.
+- `js/shop.js`: het scherm Aankleden.
 - `tests/`: `node --test`, zonder dependencies.
 
 ## Opslag
@@ -25,11 +27,14 @@ Sleutel `eenhoornrekenen:v2`:
 
     {version: 2, sound, activePlayer, tempo: {count, seconds},
      players: [{id, name, needsName, unicorns, pick, rounds, crown, badges, records,
+                glitters, closet: {itemId: tijdstip}, outfits: {eenhoornIndex: {vak: itemId}}, dry,
                 worlds: {plusmin: {mode, len, best, stats}, tafels: {mode, len, settings, stats}}}]}
 
 `stats[factKey] = {seen, last: [{ok, ms}] (max 3), w}`. Het gewicht `w` (0 tot 5) gaat +2 bij fout, +1 bij juist boven 5 s, -1 bij juist onder 3 s. Een tafel is per bewerking geautomatiseerd als elk feit de laatste 2 pogingen juist had, elk onder 3 s. Records hangen aan `tempoKey` (wereld, niveau of tafels, bewerkingen, aantal, tijd).
 
-Migratie: bestaat v2 niet maar v1 (`eenhoornrekenen:v1`) wel, dan wordt v1 de eerste speler (naam wordt gevraagd, standaard "Speler 1") en worden de hard-gewichten per niveau omgezet naar het hoogste gewicht per feit. v1 blijft staan als back-up. Verander het schema nooit zonder versie op te hogen en een migratie met test toe te voegen.
+Migratie: bestaat v2 niet maar v1 (`eenhoornrekenen:v1`) wel, dan wordt v1 de eerste speler (naam wordt gevraagd, standaard "Speler 1") en worden de hard-gewichten per niveau omgezet naar het hoogste gewicht per feit. v1 blijft staan als back-up. Een veld toevoegen met een standaardwaarde in `normalizePlayer` mag zonder versieverhoging. Elke andere schemawijziging vraagt een hogere versie en een migratie met test.
+
+Beloning: elke ronde geeft glitters (`glittersFor`). Een uitgespeelde oefenronde of een tempo-ronde binnen de tijd geeft een kans op een eenhoorn van 20, 30 of 40% bij 1, 2 of 3 sterren (tempo telt als 3), gegarandeerd na 4 rondes zonder (`dry`). Het kroontje is een hoofd-item dat je verdient met een tempo-record. "Voortgang wissen" in het ouderscherm laat glitters, kast en outfits staan (`resetProgress`).
 
 ## Lokaal testen
 
