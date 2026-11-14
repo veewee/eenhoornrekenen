@@ -6,6 +6,7 @@ import { plusmin, LEVELS } from "./world-plusmin.js";
 import { tafels, TABLES, isAutomated } from "./world-tafels.js";
 import { initParent, openParent } from "./parent.js";
 import { glittersFor, rollUnicorn, grantCrown, uniHTML } from "./rewards.js";
+import { initShop, openShop } from "./shop.js";
 
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -20,7 +21,7 @@ const persist = () => saveState(storage, state);
 const player = () => state.players.find(p => p.id === state.activePlayer) || state.players[0];
 setSoundSource(() => state.sound);
 
-const SCREENS = ["pick", "name", "home", "plusmin", "tafels", "play", "end", "parent"];
+const SCREENS = ["pick", "name", "home", "plusmin", "tafels", "play", "end", "parent", "shop"];
 function showScreen(id){ SCREENS.forEach(s => $("#" + s).hidden = s !== id); scrollTo(0, 0); }
 
 function starStr(n){ return "★".repeat(n) + "<i>" + "★".repeat(3 - n) + "</i>"; }
@@ -91,6 +92,8 @@ function renderHome(){
     : `Rijdt nu: ${UNI[p.pick][0]}. Je hebt ze allemaal gevonden!`;
   const badges = Object.keys(p.badges).sort((a, b) => a.slice(1) - b.slice(1) || a.localeCompare(b));
   $("#badges").innerHTML = badges.map(k => `<span class="badge">${badgeLabel(k)}</span>`).join("");
+  $("#homeGlitters").textContent = `✨ ${p.glitters}`;
+  $("#toShop").setAttribute("aria-label", `Aankleden, je hebt ${p.glitters} glitters`);
   $("#switchPlayer").hidden = state.players.length < 2;
   $("#whoName").textContent = p.name;
   $("#switchPlayer").setAttribute("aria-label", `Andere speler kiezen, nu speelt ${p.name}`);
@@ -102,6 +105,7 @@ $("#stable").addEventListener("click", e => {
   player().pick = +b.dataset.i; persist(); sfx("tap"); renderHome();
 });
 $("#sound").addEventListener("click", () => { state.sound = !state.sound; persist(); renderHome(); sfx("tap"); });
+$("#toShop").addEventListener("click", () => { sfx("tap"); openShop(); });
 $("#switchPlayer").addEventListener("click", () => { renderPick(); showScreen("pick"); });
 $$(".world").forEach(b => b.addEventListener("click", () => { sfx("tap"); openWorld(b.dataset.world); }));
 $$("[data-back]").forEach(b => b.addEventListener("click", goHome));
@@ -241,8 +245,9 @@ function finish(res){
     stats = `${res.correct} juist, ${res.wrong} fout in ${fmtTime(res.ms)}` + (res.done < res.total ? ` (${res.done} van de ${res.total} gemaakt)` : "");
     if (betterRecord(result, rec)){
       p.records[key] = { ...result, label: recordLabel(l), at: Date.now() };
+      const firstCrown = !p.closet.kroon;
       p.crown = true; grantCrown(p); party = true; newRecord = true;
-      news.push("👑 Nieuw record! Je kroontje hangt in je kast.");
+      news.push(firstCrown ? "👑 Nieuw record! Je kroontje hangt in je kast." : "👑 Nieuw record!");
     } else if (rec) {
       news.push(`Je record: ${rec.correct} juist in ${fmtTime(rec.ms)}`);
     }
@@ -297,6 +302,7 @@ $("#toHome").addEventListener("click", goHome);
 initFx($("#fx"));
 initPlay();
 initParent({ state, persist, onClose: () => { stopSession(); goHome(); } });
+initShop({ state, persist, player, onClose: goHome });
 
 function boot(){
   if (state.players.length > 1 && !player().needsName){ renderPick(); showScreen("pick"); }

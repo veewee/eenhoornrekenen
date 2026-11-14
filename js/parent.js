@@ -82,7 +82,7 @@ function render(){
 export function openParent(){
   viewId = ctx.state.activePlayer;
   render();
-  ["pick", "name", "home", "plusmin", "tafels", "play", "end"].forEach(s => $("#" + s).hidden = true);
+  ["pick", "name", "home", "plusmin", "tafels", "play", "end", "shop"].forEach(s => $("#" + s).hidden = true);
   $("#parent").hidden = false;
   scrollTo(0, 0);
 }
