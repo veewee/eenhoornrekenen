@@ -83,7 +83,7 @@ function renderHome(){
   $("#hello").textContent = `Hoi ${p.name}! Breng je eenhoorn naar het kasteel en verzamel ze allemaal!`;
   $("#stable").innerHTML = UNI.map((u, i) => {
     const open = i < p.unicorns;
-    return `<button class="uni ${open ? "" : "locked"}" data-i="${i}" ${open ? `aria-pressed="${p.pick === i}" aria-label="${u[0]}"` : 'aria-label="Nog niet gevonden" disabled'}><span style="filter:${u[1]}">🦄</span></button>`;
+    return `<button class="uni ${open ? "" : "locked"}" data-i="${i}" ${open ? `aria-pressed="${p.pick === i}" aria-label="${u[0]}"` : 'aria-label="Nog niet gevonden" disabled'}><span${open ? ` style="filter:${u[1]}"` : ""}>🦄</span></button>`;
   }).join("");
   const left = UNI.length - p.unicorns;
   $("#stableNote").textContent = left
