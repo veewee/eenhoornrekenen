@@ -151,13 +151,103 @@ h2{font-size:1.3rem;margin:18px 0 8px;font-weight:800}
 
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:20}
 
+/* algemeen */
+input,select{font:inherit;color:inherit}
+input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-offset:2px}
+.top{gap:10px;align-items:center}
+.top .grow{flex:1}
+.round{width:48px;height:48px;border-radius:50%;background:var(--card);border:3px solid var(--card-edge);font-size:1.4rem;display:grid;place-items:center;flex:none}
+.sound{display:grid;place-items:center}
+.gear{position:relative;overflow:hidden}
+.gear::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--lilac);opacity:.45;transform:scale(0)}
+.gear.holding::after{transform:scale(1);transition:transform 2s linear}
+.crowned{position:relative}
+.crowned::before{content:"👑";position:absolute;left:50%;top:-.42em;transform:translateX(-50%) rotate(-8deg);font-size:.5em;filter:none}
+.big.crowned::before{top:-.3em}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{flex:1;min-height:52px;padding:6px 14px;border-radius:16px;font-size:1.2rem;font-weight:800;background:var(--card);border:3px solid var(--card-edge)}
+.chip[aria-pressed="true"]{background:var(--pink);border-color:var(--pink);color:#fff}
+.back{font-size:1.4rem;font-weight:800}
+.title{font-size:1.6rem;font-weight:800;margin:0}
+.note{color:var(--ink-soft);font-size:1rem;margin:8px 0 0}
+
+/* spelers */
+.who{display:flex;flex-direction:column;gap:10px}
+.who button{display:flex;align-items:center;gap:14px;min-height:72px;padding:8px 16px;border-radius:22px;background:var(--card);border:3px solid var(--card-edge);box-shadow:0 4px 0 var(--card-edge);font-size:1.5rem;font-weight:800;text-align:left}
+.who .u{font-size:2.6rem;line-height:1}
+.namebox{display:flex;flex-direction:column;gap:14px;margin-top:10px}
+.namebox input{min-height:60px;border-radius:18px;border:3px solid var(--card-edge);background:var(--card);padding:0 16px;font-size:1.6rem;font-weight:700}
+
+/* startscherm */
+.worlds{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.world{min-height:130px;border-radius:24px;padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  background:var(--card);border:3px solid var(--card-edge);box-shadow:0 5px 0 var(--card-edge);font-size:1.35rem;font-weight:800;line-height:1.1}
+.world .ic{font-size:2.6rem;font-weight:800;line-height:1;color:var(--pink)}
+.world:nth-child(2) .ic{color:var(--blue)}
+.world:active{transform:translateY(3px);box-shadow:0 1px 0 var(--card-edge)}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.badge{background:var(--card);border:2px solid var(--sun);border-radius:12px;padding:2px 10px;font-weight:800}
+.switch-player{margin-top:16px}
+
+/* tafels */
+.tables{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.tbl{min-height:56px;border-radius:16px;background:var(--card);border:3px solid var(--card-edge);font-size:1.5rem;font-weight:800;position:relative;line-height:1}
+.tbl[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.tbl small{position:absolute;right:2px;top:-8px;font-size:.75rem;line-height:1;background:var(--sun);color:#3B1C6B;border-radius:8px;padding:2px 4px}
+.toggle{display:flex;align-items:center;gap:12px;min-height:52px;margin-top:12px;padding:6px 14px;border-radius:16px;background:var(--card);border:3px solid var(--card-edge);font-size:1.2rem;font-weight:700;width:100%;text-align:left}
+.toggle .box{width:30px;height:30px;border-radius:9px;border:3px solid var(--card-edge);display:grid;place-items:center;flex:none}
+.toggle[aria-checked="true"] .box{background:var(--mint);border-color:var(--mint);color:#fff}
+.go-btn{margin-top:18px;width:100%}
+.btn:disabled{opacity:.45}
+.groups{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.grp{display:grid;grid-template-columns:repeat(5,10px);gap:3px;padding:4px;min-width:24px;min-height:24px;border:2px solid var(--lilac);border-radius:9px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--pink)}
+
+/* tempo */
+.timebar{display:none;position:relative;flex:1;height:26px;border-radius:13px;background:var(--empty);overflow:hidden}
+.timefill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--pink),var(--sun),var(--mint),var(--blue),var(--lilac));transition:width .25s linear}
+.timeleft{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:.95rem}
+#play.tempo .timebar{display:block}
+#play.tempo .track{display:none}
+.record{font-size:1.25rem;font-weight:800;margin:0 0 12px}
+.record.new{color:var(--pink);font-size:1.5rem}
+
+/* ouderscherm */
+.parent h2{margin-top:22px}
+.panel{background:var(--card);border:3px solid var(--card-edge);border-radius:20px;padding:12px 14px}
+.grid-wrap{overflow-x:auto;margin-top:10px}
+.fgrid{display:grid;grid-template-columns:repeat(11,48px);gap:3px}
+.fgrid span,.fgrid button{width:48px;height:48px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:.95rem}
+.fgrid .hd{color:var(--ink-soft)}
+.fgrid button{background:var(--empty);color:var(--ink)}
+.fgrid .vlot,.legend .vlot{background:var(--mint);color:#fff}
+.fgrid .traag,.legend .traag{background:var(--sun);color:#3B1C6B}
+.fgrid .fout,.legend .fout{background:var(--bad);color:#fff}
+.fgrid .nog,.legend .nog{background:var(--empty)}
+.fgrid .none{visibility:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:.95rem;font-weight:700}
+.legend span{border-radius:10px;padding:2px 10px}
+.detail{min-height:1.5em;margin:10px 0 0;font-weight:700}
+.list{margin:0;padding:0;list-style:none}
+.list li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:2px solid var(--card-edge);font-weight:700}
+.list li:last-child{border-bottom:0}
+.list small{color:var(--ink-soft);font-weight:600;text-align:right}
+.row{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.row input,.row select{min-height:48px;border-radius:14px;border:3px solid var(--card-edge);background:var(--card);padding:0 12px;font-weight:700;flex:1;min-width:0}
+.row input[type="number"]{max-width:110px}
+.row label{font-weight:700;min-width:120px}
+.sbtn{min-height:48px;padding:0 16px;border-radius:14px;font-weight:800;background:var(--card);border:3px solid var(--card-edge)}
+.sbtn.warn{background:var(--bad);border-color:var(--bad);color:#fff}
+.sbtn:disabled{opacity:.4}
+
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-10px) rotate(4deg)}}
 @keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-18px) rotate(-10deg)}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
 @keyframes spin-in{0%{transform:scale(0) rotate(-200deg)}100%{transform:scale(1) rotate(0)}}
 @media (prefers-reduced-motion: reduce){
   .hero .big,.end .big,.runner.hop,.card.shake{animation:none}
-  .runner{transition:none}
+  .runner,.timefill{transition:none}
+  .gear.holding::after{transition:none;transform:scale(.6)}
 }
 @media (max-height:700px){
   .key{min-height:54px;font-size:1.7rem}
@@ -169,26 +259,77 @@ h2{font-size:1.3rem;margin:18px 0 8px;font-weight:800}
 <canvas id="fx"></canvas>
 <main>
 
-<section id="home">
-  <div class="top"><button class="sound" id="sound" aria-label="Geluid aan of uit">🔊</button></div>
-  <div class="hero"><span class="big" id="heroUni">🦄</span><h1>Eenhoornrekenen</h1></div>
-  <p class="lead">Breng je eenhoorn naar het kasteel en verzamel ze allemaal!</p>
+<section id="pick" hidden>
+  <div class="hero"><span class="big">🦄</span><h1>Eenhoornrekenen</h1></div>
+  <p class="lead">Wie speelt er?</p>
+  <div class="who" id="who"></div>
+</section>
 
-  <h2>Welke sommen?</h2>
-  <div class="levels" id="levels"></div>
+<section id="name" hidden>
+  <div class="hero"><span class="big" id="nameUni">🦄</span><h1>Eenhoornrekenen</h1></div>
+  <form class="namebox" id="nameForm">
+    <label class="lead" for="nameInput">Hoe heet jij?</label>
+    <input id="nameInput" maxlength="20" autocomplete="off" enterkeyhint="done">
+    <button class="btn" type="submit">Klaar!</button>
+  </form>
+</section>
 
-  <h2>Hoeveel sommen?</h2>
-  <div class="lens" id="lens"></div>
+<section id="home" hidden>
+  <div class="top">
+    <button class="round gear" id="gear" aria-label="Ouders: hou 2 seconden ingedrukt">⚙️</button>
+    <span class="grow"></span>
+    <button class="sound round" id="sound" aria-label="Geluid aan of uit">🔊</button>
+  </div>
+  <div class="hero"><span class="big" id="heroUni"><span id="heroFace">🦄</span></span><h1>Eenhoornrekenen</h1></div>
+  <p class="lead" id="hello">Breng je eenhoorn naar het kasteel en verzamel ze allemaal!</p>
+
+  <div class="worlds">
+    <button class="world" data-world="plusmin"><span class="ic">+ &minus;</span>Plus en min</button>
+    <button class="world" data-world="tafels"><span class="ic">× :</span>Tafels</button>
+  </div>
 
   <h2>Jouw stal</h2>
   <div class="stable" id="stable"></div>
   <p class="stable-note" id="stableNote"></p>
+  <div class="badges" id="badges"></div>
+  <button class="btn alt switch-player" id="switchPlayer" hidden>Andere speler</button>
+</section>
+
+<section id="plusmin" hidden>
+  <div class="top"><button class="round back" data-back aria-label="Terug">←</button><h2 class="title grow">Plus en min</h2></div>
+  <h2>Hoe wil je spelen?</h2>
+  <div class="chips modes" data-world="plusmin"></div>
+  <h2>Welke sommen?</h2>
+  <div class="levels" id="levels"></div>
+  <div data-practice>
+    <h2>Hoeveel sommen?</h2>
+    <div class="lens" data-world="plusmin"></div>
+  </div>
+  <p class="note" data-tempo></p>
+</section>
+
+<section id="tafels" hidden>
+  <div class="top"><button class="round back" data-back aria-label="Terug">←</button><h2 class="title grow">Tafels</h2></div>
+  <h2>Hoe wil je spelen?</h2>
+  <div class="chips modes" data-world="tafels"></div>
+  <h2>Welke tafels?</h2>
+  <div class="tables" id="tables"></div>
+  <h2>Maal of delen?</h2>
+  <div class="chips" id="ops"></div>
+  <button class="toggle" id="reverse" role="switch" aria-checked="false"><span class="box">✓</span>Ook omgekeerd, zoals 2 × 7</button>
+  <div data-practice>
+    <h2>Hoeveel sommen?</h2>
+    <div class="lens" data-world="tafels"></div>
+  </div>
+  <p class="note" data-tempo></p>
+  <button class="btn go-btn" id="goTafels">Start!</button>
 </section>
 
 <section id="play" hidden>
   <div class="bar">
     <button class="stop" id="stop" aria-label="Stoppen">✕</button>
-    <div class="track"><div class="rainbow"></div><span class="castle">🏰</span><span class="runner" id="runner">🦄</span></div>
+    <div class="track"><div class="rainbow"></div><span class="castle">🏰</span><span class="runner" id="runner"><span id="riderUni">🦄</span></span></div>
+    <div class="timebar" id="timebar" role="progressbar" aria-label="Resterende tijd in seconden" aria-valuemin="0"><div class="timefill" id="timefill"></div><span class="timeleft" id="timeleft"></span></div>
     <div class="count" id="count">0/10</div>
   </div>
   <div class="streak" id="streak" aria-live="polite"></div>
@@ -205,293 +346,55 @@ h2{font-size:1.3rem;margin:18px 0 8px;font-weight:800}
   <div class="stars" id="endStars"></div>
   <h2 id="endTitle"></h2>
   <p class="stats" id="endStats"></p>
-  <div class="missed" id="missed" hidden><p>Deze oefenen we nog eens:</p><ul id="missedList"></ul></div>
+  <p class="record" id="endRecord" hidden></p>
+  <div class="missed" id="missed" hidden><p id="missedTitle">Deze oefenen we nog eens:</p><ul id="missedList"></ul></div>
   <div class="btns">
     <button class="btn alt" id="toHome">Naar de stal</button>
     <button class="btn" id="again">Nog een keer</button>
   </div>
 </section>
 
+<section id="parent" class="parent" hidden>
+  <div class="top"><button class="round back" id="parentClose" aria-label="Sluiten">✕</button><h2 class="title grow">Voor ouders</h2></div>
+
+  <h2>Speler</h2>
+  <div class="chips" id="pPlayers"></div>
+
+  <h2>Tafels</h2>
+  <div class="panel">
+    <div class="chips" id="pOps"></div>
+    <div class="grid-wrap"><div class="fgrid" id="pGrid"></div></div>
+    <div class="legend"><span class="vlot">vlot</span><span class="traag">traag</span><span class="fout">fout</span><span class="nog">nog niet geoefend</span></div>
+    <p class="detail" id="pDetail" aria-live="polite">Tik op een vakje voor de laatste resultaten.</p>
+  </div>
+
+  <h2>Plus en min: moeilijkste sommen</h2>
+  <div class="panel"><ul class="list" id="pHard"></ul></div>
+
+  <h2>Tempo</h2>
+  <div class="panel">
+    <div class="row"><label for="pCount">Aantal sommen</label><input type="number" id="pCount" min="5" max="200" inputmode="numeric"></div>
+    <div class="row"><label for="pMin">Tijd</label><input type="number" id="pMin" min="0" max="60" inputmode="numeric" aria-label="Minuten"> min <input type="number" id="pSec" min="0" max="59" inputmode="numeric" aria-label="Seconden"> s</div>
+    <p class="note" id="pPace"></p>
+    <h2>Records</h2>
+    <ul class="list" id="pRecords"></ul>
+  </div>
+
+  <h2>Spelers</h2>
+  <div class="panel">
+    <div id="pManage"></div>
+    <form class="row" id="pAdd"><input id="pNewName" maxlength="20" placeholder="Naam nieuwe speler" aria-label="Naam nieuwe speler"><button class="sbtn" type="submit">Toevoegen</button></form>
+  </div>
+
+  <h2>Instellingen</h2>
+  <div class="panel">
+    <div class="row"><button class="toggle" id="pSound" role="switch" aria-checked="true"><span class="box">✓</span>Geluid</button></div>
+    <div class="row"><button class="sbtn warn" id="pReset">Voortgang wissen</button></div>
+    <p class="note">Wist de stal, sterren, statistieken, records en kroontjes van de gekozen speler. De naam blijft.</p>
+  </div>
+</section>
+
 </main>
-<script>
-const $ = s => document.querySelector(s);
-const MINUS = "\u2212";
-const sym = op => op === "+" ? "+" : MINUS;
-
-const LEVELS = [
-  {id:"v10", name:"Vriendjes van 10", ex:"7 + ? = 10", col:"var(--pink)"},
-  {id:"p10", name:"Plus tot 10", ex:"4 + 3", col:"var(--sun)"},
-  {id:"m10", name:"Min tot 10", ex:"9 " + MINUS + " 5", col:"var(--mint)"},
-  {id:"x10", name:"Plus en min tot 10", ex:"door elkaar", col:"var(--blue)"},
-  {id:"z20", name:"Tot 20, zonder brug", ex:"13 + 4 en 17 " + MINUS + " 5", col:"var(--lilac)"},
-  {id:"b20", name:"Tot 20, over de brug", ex:"8 + 5 en 13 " + MINUS + " 6", col:"var(--pink)"},
-  {id:"a20", name:"Alles tot 20", ex:"de grote uitdaging", col:"var(--sun)"}
-];
-const UNI = [
-  ["Glitter","none"],["Suikerspin","hue-rotate(300deg) saturate(1.4)"],["Sterrenstof","hue-rotate(200deg) saturate(1.5)"],
-  ["Regenboog","hue-rotate(40deg) saturate(1.8)"],["Bubbel","hue-rotate(160deg) saturate(1.4)"],["Maanlicht","hue-rotate(240deg) saturate(1.3)"],
-  ["Kaneel","sepia(.8) saturate(1.6)"],["Fonkel","hue-rotate(100deg) saturate(1.6)"],["Wolkje","grayscale(.85) brightness(1.15)"],
-  ["Zonnestraal","hue-rotate(60deg) saturate(2)"],["Toverstaf","hue-rotate(270deg) saturate(1.8)"],["Pluim","hue-rotate(330deg) saturate(2)"]
-];
-const PRAISE = ["Super!","Knap!","Toppie!","Yes!","Prachtig!","Wauw!","Goed zo!","Fantastisch!"];
-
-/* opslag */
-const KEY = "eenhoornrekenen:v1";
-let save = {unicorns:1, pick:0, hard:{}, best:{}, rounds:0, sound:true, len:10};
-try { const s = localStorage.getItem(KEY); if (s) save = Object.assign(save, JSON.parse(s)); } catch(e) {}
-function persist(){ try { localStorage.setItem(KEY, JSON.stringify(save)); } catch(e) {} }
-
-/* sommen */
-function fact(a, op, b, hide, w){ const c = op === "+" ? a + b : a - b; return {a, op, b, c, hide:hide||"c", w:w||1, key:a+op+b+(hide||"c")}; }
-function pool(id){
-  const out = [];
-  const p10 = () => { for (let a=0;a<=10;a++) for (let b=0;b<=10-a;b++){ if (a+b===0) continue; out.push(fact(a,"+",b,"c",(a===0||b===0)?.35:1)); } };
-  const m10 = () => { for (let a=1;a<=10;a++) for (let b=0;b<=a;b++) out.push(fact(a,"-",b,"c",(b===0||b===a)?.35:1)); };
-  const z20 = w => { for (let t=0;t<=8;t++){ const a=10+t; for (let b=1;b<=9-t;b++){ out.push(fact(a,"+",b,"c",w)); out.push(fact(b,"+",a,"c",w*.5)); } }
-                     for (let a=11;a<=19;a++) for (let b=1;b<=a-10;b++) out.push(fact(a,"-",b,"c",w)); };
-  const b20 = w => { for (let a=2;a<=9;a++) for (let b=2;b<=9;b++) if (a+b>10) out.push(fact(a,"+",b,"c",w));
-                     for (let a=11;a<=18;a++) for (let b=2;b<=9;b++) if (b>a-10) out.push(fact(a,"-",b,"c",w)); };
-  if (id==="v10") for (let a=0;a<=10;a++) out.push(fact(a,"+",10-a,"b",(a===0||a===10)?.3:1));
-  if (id==="p10") p10();
-  if (id==="m10") m10();
-  if (id==="x10"){ p10(); m10(); }
-  if (id==="z20") z20(1);
-  if (id==="b20") b20(1);
-  if (id==="a20"){ p10(); m10(); out.forEach(f => f.w *= .3); z20(.7); b20(1.3); }
-  return out;
-}
-function buildQueue(id, n){
-  const P = pool(id), hard = save.hard[id] || {}, q = [];
-  let bag = [], guard = 0;
-  while (q.length < n && guard++ < 2000){
-    if (!bag.length) bag = P.slice();
-    const ws = bag.map(f => f.w * (1 + 2 * (hard[f.key] || 0)));
-    let r = Math.random() * ws.reduce((s,x) => s + x, 0), i = 0;
-    while (i < ws.length - 1 && (r -= ws[i]) > 0) i++;
-    const f = bag.splice(i,1)[0];
-    if (q.length && q[q.length-1].key === f.key) continue;
-    q.push(Object.assign({}, f));
-  }
-  return q;
-}
-function bumpHard(id, key, d){
-  save.hard[id] = save.hard[id] || {};
-  const v = Math.max(0, Math.min(5, (save.hard[id][key] || 0) + d));
-  if (v === 0) delete save.hard[id][key]; else save.hard[id][key] = v;
-}
-
-/* geluid */
-let ac;
-function tone(f, t, d, type, v){
-  const o = ac.createOscillator(), g = ac.createGain();
-  o.type = type || "triangle"; o.frequency.value = f;
-  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v || .14, t + .02); g.gain.exponentialRampToValueAtTime(.001, t + d);
-  o.connect(g).connect(ac.destination); o.start(t); o.stop(t + d + .05);
-}
-function sfx(kind){
-  if (!save.sound) return;
-  try {
-    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
-    const t = ac.currentTime;
-    if (kind==="good") [784,988,1319].forEach((f,i) => tone(f, t+i*.07, .22));
-    if (kind==="fast") [988,1319,1568,1976].forEach((f,i) => tone(f, t+i*.05, .2));
-    if (kind==="bad") { tone(330, t, .2, "sine", .1); tone(262, t+.15, .3, "sine", .1); }
-    if (kind==="streak") [523,659,784,1047,1319,1568,2093].forEach((f,i) => tone(f, t+i*.06, .25));
-    if (kind==="win") [[523,0],[659,.15],[784,.3],[1047,.45],[784,.65],[1047,.8]].forEach(([f,d]) => tone(f, t+d, .35, "square", .07));
-    if (kind==="tap") tone(1200, t, .05, "sine", .04);
-  } catch(e) {}
-}
-
-/* effecten */
-const cv = $("#fx"), cx = cv.getContext("2d");
-const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-let parts = [], running = false;
-function sizeCanvas(){ const r = devicePixelRatio || 1; cv.width = innerWidth * r; cv.height = innerHeight * r; cx.setTransform(r,0,0,r,0,0); }
-addEventListener("resize", sizeCanvas); sizeCanvas();
-const COLS = ["#FF4FA0","#FFC93C","#1FCB9D","#4DA8FF","#A77BFF","#FF8A3D"];
-function burst(x, y, n, spread){
-  n = reduce ? Math.ceil(n/4) : n;
-  for (let i=0;i<n;i++){
-    const a = Math.random()*Math.PI*2, s = (spread||6)*(.4+Math.random());
-    parts.push({x, y, vx:Math.cos(a)*s, vy:Math.sin(a)*s - 3, life:1, size:6+Math.random()*8,
-      col:COLS[i%COLS.length], shape:["star","heart","dot"][i%3], rot:Math.random()*6, vr:(Math.random()-.5)*.3});
-  }
-  if (!running){ running = true; requestAnimationFrame(tick); }
-}
-function rainShow(){
-  for (let k=0;k<6;k++) setTimeout(() => burst(innerWidth*(.1+.16*k), innerHeight*.9, 22, 11), k*90);
-}
-function drawStar(s){ cx.beginPath(); for (let i=0;i<10;i++){ const r = i%2 ? s*.45 : s, a = i*Math.PI/5 - Math.PI/2; cx.lineTo(Math.cos(a)*r, Math.sin(a)*r); } cx.closePath(); cx.fill(); }
-function drawHeart(s){ cx.beginPath(); cx.moveTo(0, s*.35); cx.bezierCurveTo(-s*1.2,-s*.4,-s*.4,-s*1.1,0,-s*.35); cx.bezierCurveTo(s*.4,-s*1.1,s*1.2,-s*.4,0,s*.35); cx.fill(); }
-function tick(){
-  cx.clearRect(0,0,innerWidth,innerHeight);
-  parts = parts.filter(p => p.life > 0);
-  for (const p of parts){
-    p.x += p.vx; p.y += p.vy; p.vy += .22; p.vx *= .99; p.rot += p.vr; p.life -= .014;
-    cx.save(); cx.globalAlpha = Math.max(0, p.life); cx.fillStyle = p.col; cx.translate(p.x, p.y); cx.rotate(p.rot);
-    if (p.shape==="star") drawStar(p.size); else if (p.shape==="heart") drawHeart(p.size); else { cx.beginPath(); cx.arc(0,0,p.size*.5,0,7); cx.fill(); }
-    cx.restore();
-  }
-  if (parts.length) requestAnimationFrame(tick); else { running = false; cx.clearRect(0,0,innerWidth,innerHeight); }
-}
-
-/* home */
-let level = null;
-function uniFilter(i){ return UNI[i][1]; }
-function starStr(n){ return "★".repeat(n) + "<i>" + "★".repeat(3-n) + "</i>"; }
-function renderHome(){
-  $("#sound").textContent = save.sound ? "🔊" : "🔇";
-  $("#heroUni").style.filter = uniFilter(save.pick);
-  $("#levels").innerHTML = LEVELS.map((l,i) =>
-    `<button class="level" data-id="${l.id}"><span class="nr" style="background:${l.col}">${i+1}</span>
-     <span><b>${l.name}</b><small>${l.ex}</small></span><span class="st">${starStr(save.best[l.id]||0)}</span></button>`).join("");
-  $("#lens").innerHTML = [10,15,20].map(n => `<button class="len" data-n="${n}" aria-pressed="${save.len===n}">${n}</button>`).join("");
-  $("#stable").innerHTML = UNI.map((u,i) => {
-    const open = i < save.unicorns;
-    return `<button class="uni ${open?"":"locked"}" data-i="${i}" ${open?`aria-pressed="${save.pick===i}" aria-label="${u[0]}"`:'aria-label="Nog niet gevonden" disabled'}><span style="filter:${uniFilter(i)}">🦄</span></button>`;
-  }).join("");
-  const left = UNI.length - save.unicorns;
-  $("#stableNote").textContent = left
-    ? `Rijdt nu: ${UNI[save.pick][0]}. Nog ${left} eenhoorns te vinden. Elke keer dat je het kasteel haalt, komt er eentje bij.`
-    : `Rijdt nu: ${UNI[save.pick][0]}. Je hebt ze allemaal gevonden!`;
-}
-$("#levels").addEventListener("click", e => { const b = e.target.closest(".level"); if (b) start(b.dataset.id); });
-$("#lens").addEventListener("click", e => { const b = e.target.closest(".len"); if (!b) return; save.len = +b.dataset.n; persist(); sfx("tap"); renderHome(); });
-$("#stable").addEventListener("click", e => { const b = e.target.closest(".uni"); if (!b || b.disabled) return; save.pick = +b.dataset.i; persist(); sfx("tap"); renderHome(); });
-$("#sound").addEventListener("click", () => { save.sound = !save.sound; persist(); renderHome(); sfx("tap"); });
-
-/* spel */
-let G = null;
-function showScreen(id){ ["home","play","end"].forEach(s => $("#"+s).hidden = s !== id); scrollTo(0,0); }
-function start(id){
-  level = id;
-  G = {queue:buildQueue(id, save.len), idx:0, input:"", tries:0, first:0, fast:0, streak:0, missed:[], requeued:new Set(), lock:false};
-  $("#runner").style.filter = uniFilter(save.pick);
-  showScreen("play"); show();
-}
-function cur(){ return G.queue[G.idx]; }
-function renderEq(state){
-  const f = cur(), vals = {a:f.a, b:f.b, c:f.c};
-  const slot = `<span class="slot ${state||""}">${state==="show" ? f[f.hide] : (G.input || "?")}</span>`;
-  const p = k => k === f.hide ? slot : `<span>${vals[k]}</span>`;
-  $("#eq").innerHTML = `${p("a")}<span class="op">${sym(f.op)}</span>${p("b")}<span class="op">=</span>${p("c")}`;
-}
-function updateTrack(){
-  const n = G.queue.length, p = G.idx / n;
-  $("#runner").style.left = `calc(${p*100}% - ${p*40}px)`;
-  $("#count").textContent = `${Math.min(G.idx+1,n)}/${n}`;
-}
-function show(){
-  G.input = ""; G.tries = 0; G.lock = false; G.shownAt = performance.now();
-  $("#help").hidden = true; $("#feedback").textContent = cur().again ? "Deze ken je nu!" : "";
-  renderEq(); updateTrack();
-}
-function frames(f){
-  const n = Math.max(f.a, f.c) > 10 ? 20 : 10, cells = Array(n).fill("");
-  let hint = "";
-  for (let i=0;i<f.a;i++) cells[i] = "p";
-  if (f.op === "+"){
-    if (f.hide === "b") hint = "Hoeveel lege vakjes zijn er nog?";
-    else {
-      for (let i=f.a;i<f.a+f.b;i++) cells[i] = "m";
-      const big = Math.max(f.a,f.b), small = Math.min(f.a,f.b);
-      if (f.c > 10 && big < 10){ const fill = 10 - big; hint = (f.a < f.b ? `Draai om: ${big} + ${small}. ` : "") + `${big} + ${fill} = 10, en dan nog ${small-fill} erbij.`; }
-      else if (f.c > 10) hint = `Kijk naar de eenheden: ${big%10} + ${small}.`;
-      else hint = "Hoeveel zijn het er samen?";
-    }
-  } else {
-    for (let i=f.a-f.b;i<f.a;i++) cells[i] = "x";
-    if (f.a > 10 && f.c < 10){ const s = f.a - 10; hint = `${f.a} ${MINUS} ${s} = 10, en dan nog ${f.b-s} eraf.`; }
-    else if (f.a > 10) hint = `Kijk naar de eenheden: ${f.a%10} ${MINUS} ${f.b}.`;
-    else hint = "Hoeveel blijven er over?";
-  }
-  let html = '<div class="frames">';
-  for (let fr=0; fr<n/10; fr++){ html += '<div class="frame">' + cells.slice(fr*10, fr*10+10).map(c => `<span class="cell ${c}"></span>`).join("") + "</div>"; }
-  html += `</div><p class="hint">${hint}</p>`;
-  $("#help").innerHTML = html; $("#help").hidden = false;
-}
-function cardCenter(){ const r = $("#card").getBoundingClientRect(); return [r.left + r.width/2, r.top + r.height*.35]; }
-function submit(){
-  if (G.lock || !G.input) return;
-  const f = cur(), ans = f[f.hide], t = performance.now() - G.shownAt;
-  if (+G.input === ans){
-    G.lock = true;
-    const quick = G.tries === 0 && t < 3500;
-    if (G.tries === 0){ G.first++; G.streak++; if (quick) G.fast++; bumpHard(level, f.key, quick ? -1 : 0); }
-    renderEq("ok");
-    $("#feedback").textContent = quick ? "⚡ Bliksemsnel!" : PRAISE[Math.floor(Math.random()*PRAISE.length)];
-    const [x,y] = cardCenter(); burst(x, y, quick ? 40 : 26, quick ? 9 : 7);
-    sfx(quick ? "fast" : "good");
-    if (G.streak && G.streak % 5 === 0 && G.tries === 0){ setTimeout(() => { rainShow(); sfx("streak"); }, 250); }
-    $("#streak").textContent = G.streak >= 2 ? `🌈 ${G.streak} op rij!` : "";
-    const r = $("#runner"); r.classList.remove("hop"); void r.offsetWidth; r.classList.add("hop");
-    G.idx++; updateTrack();
-    setTimeout(() => G.idx >= G.queue.length ? finish() : show(), quick ? 700 : 900);
-  } else {
-    G.tries++; G.streak = 0; $("#streak").textContent = "";
-    const c = $("#card"); c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake");
-    sfx("bad");
-    if (G.tries === 1){
-      bumpHard(level, f.key, 2);
-      G.input = ""; renderEq(); frames(f);
-      $("#feedback").textContent = "Bijna! Kijk naar de bolletjes en probeer nog eens.";
-    } else {
-      G.lock = true;
-      renderEq("show"); frames(f);
-      $("#feedback").textContent = `Het is ${ans}. Die komt straks nog eens terug.`;
-      if (!G.missed.some(m => m.key === f.key)) G.missed.push(f);
-      if (!G.requeued.has(f.key)){ G.requeued.add(f.key); G.queue.splice(Math.min(G.idx+3, G.queue.length), 0, Object.assign({}, f, {again:true})); }
-      G.idx++;
-      setTimeout(() => G.idx >= G.queue.length ? finish() : show(), 2800);
-    }
-  }
-  persist();
-}
-function press(k){
-  if (!G || G.lock) return;
-  if (k === "ok") return submit();
-  sfx("tap");
-  if (k === "del") G.input = G.input.slice(0,-1);
-  else if (G.input.length < 2) G.input = (G.input === "0" ? "" : G.input) + k;
-  renderEq();
-}
-$("#pad").innerHTML = ["1","2","3","4","5","6","7","8","9","del","0","ok"].map(k =>
-  `<button class="key ${k==="ok"?"go":k==="del"?"del":""}" data-k="${k}" ${k==="ok"?'aria-label="Klaar"':k==="del"?'aria-label="Wissen"':""}>${k==="ok"?"✓":k==="del"?"⌫":k}</button>`).join("");
-$("#pad").addEventListener("click", e => { const b = e.target.closest(".key"); if (b) press(b.dataset.k); });
-addEventListener("keydown", e => {
-  if ($("#play").hidden) return;
-  if (/^[0-9]$/.test(e.key)) press(e.key);
-  else if (e.key === "Backspace") press("del");
-  else if (e.key === "Enter") { e.preventDefault(); press("ok"); }
-});
-$("#stop").addEventListener("click", () => { G = null; renderHome(); showScreen("home"); });
-
-function finish(){
-  const total = G.queue.length, acc = G.first / total;
-  const stars = acc >= .9 ? 3 : acc >= .7 ? 2 : 1;
-  save.best[level] = Math.max(save.best[level] || 0, stars);
-  save.rounds++;
-  let newUni = null;
-  if (save.unicorns < UNI.length){ newUni = save.unicorns; save.unicorns++; save.pick = newUni; }
-  persist();
-  const show = newUni !== null ? newUni : save.pick;
-  $("#endUni").style.filter = uniFilter(show);
-  $("#endUni").style.animation = "none"; void $("#endUni").offsetWidth; $("#endUni").style.animation = "";
-  $("#endStars").innerHTML = starStr(stars);
-  $("#endTitle").textContent = newUni !== null ? `Nieuw in je stal: ${UNI[newUni][0]}!` : "Kasteel gehaald!";
-  $("#endStats").textContent = `${G.first} van de ${total} meteen juist` + (G.fast ? `, ${G.fast} keer bliksemsnel ⚡` : "");
-  $("#missed").hidden = !G.missed.length;
-  $("#missedList").innerHTML = G.missed.map(f => `<li>${f.a} ${sym(f.op)} ${f.b} = ${f.c}</li>`).join("");
-  showScreen("end");
-  setTimeout(() => { rainShow(); sfx("win"); }, 200);
-}
-$("#again").addEventListener("click", () => start(level));
-$("#toHome").addEventListener("click", () => { renderHome(); showScreen("home"); });
-
-renderHome();
-if ("serviceWorker" in navigator && window.isSecureContext) {
-  addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
-}
-</script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
