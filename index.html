@@ -165,9 +165,13 @@ input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-o
 .gear-hint:empty{display:none}
 .gear::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--lilac);opacity:.45;transform:scale(0)}
 .gear.holding::after{transform:scale(1);transition:transform 2s linear}
-.crowned{position:relative}
-.crowned::before{content:"👑";position:absolute;left:50%;top:-.42em;transform:translateX(-50%) rotate(-8deg);font-size:.5em;filter:none}
-.big.crowned::before{top:-.3em}
+.unicorn{position:relative;display:inline-block;line-height:1}
+.unicorn .wear{position:absolute;line-height:1;pointer-events:none}
+.w-hoofd{left:44%;top:-.2em;font-size:.46em;transform:translateX(-50%) rotate(-12deg)}
+.w-ogen{left:20%;top:32%;font-size:.3em;transform:rotate(-8deg)}
+.w-hals{left:52%;top:68%;font-size:.36em}
+.w-vriendje{left:-22%;bottom:-6%;font-size:.42em}
+.w-glans{right:-22%;top:-10%;font-size:.42em}
 .chips{display:flex;gap:10px;flex-wrap:wrap}
 .chip{flex:1;min-height:52px;padding:6px 14px;border-radius:16px;font-size:1.2rem;font-weight:800;background:var(--card);border:3px solid var(--card-edge)}
 .chip[aria-pressed="true"]{background:var(--pink);border-color:var(--pink);color:#fff}
@@ -306,7 +310,7 @@ input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-o
     <button class="who-chip" id="switchPlayer" hidden><span id="whoName"></span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg></button>
     <button class="sound round" id="sound" aria-label="Geluid aan of uit"></button>
   </div>
-  <div class="hero"><span class="big" id="heroUni"><span id="heroFace">🦄</span></span><h1>Eenhoornrekenen</h1></div>
+  <div class="hero"><span class="big" id="heroUni"></span><h1>Eenhoornrekenen</h1></div>
   <p class="lead" id="hello">Breng je eenhoorn naar het kasteel en verzamel ze allemaal!</p>
 
   <div class="worlds">
@@ -352,7 +356,7 @@ input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-o
 <section id="play" hidden>
   <div class="bar">
     <button class="stop" id="stop" aria-label="Stoppen">✕</button>
-    <div class="track"><div class="rainbow"></div><span class="castle">🏰</span><span class="runner" id="runner"><span id="riderUni">🦄</span></span></div>
+    <div class="track"><div class="rainbow"></div><span class="castle">🏰</span><span class="runner" id="runner"></span></div>
     <div class="timebar" id="timebar" role="progressbar" aria-label="Resterende tijd in seconden" aria-valuemin="0"><div class="timefill" id="timefill"></div><span class="timeleft" id="timeleft"></span></div>
     <div class="count" id="count">0/10</div>
   </div>
@@ -414,7 +418,7 @@ input:focus-visible,select:focus-visible{outline:4px solid var(--blue);outline-o
   <div class="panel">
     <div class="row"><button class="toggle" id="pSound" role="switch" aria-checked="true"><span class="box">✓</span>Geluid</button></div>
     <div class="row"><button class="sbtn warn" id="pReset">Voortgang wissen</button></div>
-    <p class="note">Wist de stal, sterren, statistieken, records en kroontjes van de gekozen speler. De naam blijft.</p>
+    <p class="note">Wist de stal, sterren, statistieken en records van de gekozen speler. De naam, glitters en outfits blijven.</p>
   </div>
 </section>
 

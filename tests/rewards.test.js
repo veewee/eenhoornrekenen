@@ -15,11 +15,12 @@ test("glitters volgen de tabel uit het ontwerp", () => {
 });
 
 test("kans op een eenhoorn hangt af van de sterren, met garantie na 4 droge rondes", () => {
-  assert.equal(rollUnicorn(1, 0, () => .24), true);
-  assert.equal(rollUnicorn(1, 0, () => .25), false);
-  assert.equal(rollUnicorn(2, 0, () => .39), true);
-  assert.equal(rollUnicorn(2, 0, () => .40), false);
-  assert.equal(rollUnicorn(3, 0, () => .59), true);
+  assert.equal(rollUnicorn(1, 0, () => .19), true);
+  assert.equal(rollUnicorn(1, 0, () => .20), false);
+  assert.equal(rollUnicorn(2, 0, () => .29), true);
+  assert.equal(rollUnicorn(2, 0, () => .30), false);
+  assert.equal(rollUnicorn(3, 0, () => .39), true);
+  assert.equal(rollUnicorn(3, 0, () => .40), false);
   assert.equal(rollUnicorn(3, 3, () => .99), false);
   assert.equal(rollUnicorn(1, 4, () => .99), true);
 });

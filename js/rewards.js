@@ -32,7 +32,8 @@ export function glittersFor({ mode, stars = 0, timedOut = false, newRecord = fal
   return base + (newRecord ? 10 : 0) + 30 * newBadges;
 }
 
-export function unicornChance(stars){ return stars >= 3 ? .6 : stars === 2 ? .4 : .25; }
+// With the dry-round guarantee this averages one unicorn per 2.3 rounds at 3 stars and per 3.4 at 1 star.
+export function unicornChance(stars){ return stars >= 3 ? .4 : stars === 2 ? .3 : .2; }
 
 export function rollUnicorn(stars, dry, rand = Math.random){
   return dry >= DRY_GUARANTEE || rand() < unicornChance(stars);

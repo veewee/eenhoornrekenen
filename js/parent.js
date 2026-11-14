@@ -1,4 +1,4 @@
-import { SYM, FAST_MS, newPlayer, fmtTime, sfx } from "./core.js";
+import { SYM, FAST_MS, newPlayer, resetProgress, fmtTime, sfx } from "./core.js";
 import { TABLES } from "./world-tafels.js";
 
 const $ = s => document.querySelector(s);
@@ -141,7 +141,7 @@ export function initParent(c){
     confirmTap(btn, btn.textContent, () => {
       const { state } = ctx, i = state.players.findIndex(q => q.id === viewId);
       if (i < 0) return;
-      state.players[i] = newPlayer(state.players[i].name, state.players[i].id);
+      state.players[i] = resetProgress(state.players[i]);
       save();
     });
   });

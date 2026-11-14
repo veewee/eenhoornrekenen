@@ -269,7 +269,7 @@ export function stopSession(){
   S = null;
 }
 
-/* opts: {world, queue, mode: "oefenen"|"tempo", seconds, filter, crown, onAnswer(fact, ok, ms), onEnd(result), onStop()} */
+/* opts: {world, queue, mode: "oefenen"|"tempo", seconds, riderHTML, onAnswer(fact, ok, ms), onEnd(result), onStop()} */
 export function startSession(opts){
   stopSession();
   const tempo = opts.mode === "tempo";
@@ -279,8 +279,7 @@ export function startSession(opts){
     maxDigits: String(Math.max(...opts.queue.map(f => f[f.hide]))).length
   });
   $("#play").classList.toggle("tempo", tempo);
-  $("#riderUni").style.filter = opts.filter;
-  $("#runner").classList.toggle("crowned", !!opts.crown);
+  $("#runner").innerHTML = opts.riderHTML;
   $("#streak").textContent = "";
   if (tempo){
     S.endsAt = S.startedAt + opts.seconds * 1000;

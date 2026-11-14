@@ -5,6 +5,7 @@ import {
 import { plusmin, LEVELS } from "./world-plusmin.js";
 import { tafels, TABLES, isAutomated } from "./world-tafels.js";
 import { initParent, openParent } from "./parent.js";
+import { glittersFor, rollUnicorn, grantCrown, uniHTML } from "./rewards.js";
 
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -49,7 +50,7 @@ function tempoSet(){
 
 function renderPick(){
   $("#who").innerHTML = state.players.map(p =>
-    `<button data-id="${esc(p.id)}"><span class="u${p.crown ? " crowned" : ""}"><span style="filter:${UNI[p.pick][1]}">🦄</span></span>${esc(p.name)}</button>`).join("");
+    `<button data-id="${esc(p.id)}">${uniHTML(p, p.pick, "u")}${esc(p.name)}</button>`).join("");
 }
 $("#who").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
@@ -58,7 +59,7 @@ $("#who").addEventListener("click", e => {
 
 function askName(){
   const p = player();
-  $("#nameUni").style.filter = UNI[p.pick][1];
+  $("#nameUni").innerHTML = uniHTML(p, p.pick);
   $("#nameInput").value = p.name;
   showScreen("name");
   $("#nameInput").focus();
@@ -78,16 +79,15 @@ function renderHome(){
   const p = player();
   $("#sound").innerHTML = state.sound ? SOUND_ON : SOUND_OFF;
   $("#sound").setAttribute("aria-pressed", state.sound);
-  $("#heroFace").style.filter = UNI[p.pick][1];
-  $("#heroUni").classList.toggle("crowned", p.crown);
+  $("#heroUni").innerHTML = uniHTML(p, p.pick);
   $("#hello").textContent = `Hoi ${p.name}! Breng je eenhoorn naar het kasteel en verzamel ze allemaal!`;
   $("#stable").innerHTML = UNI.map((u, i) => {
     const open = i < p.unicorns;
-    return `<button class="uni ${open ? "" : "locked"}" data-i="${i}" ${open ? `aria-pressed="${p.pick === i}" aria-label="${u[0]}"` : 'aria-label="Nog niet gevonden" disabled'}><span${open ? ` style="filter:${u[1]}"` : ""}>🦄</span></button>`;
+    return `<button class="uni ${open ? "" : "locked"}" data-i="${i}" ${open ? `aria-pressed="${p.pick === i}" aria-label="${u[0]}"` : 'aria-label="Nog niet gevonden" disabled'}>${open ? uniHTML(p, i) : "<span>🦄</span>"}</button>`;
   }).join("");
   const left = UNI.length - p.unicorns;
   $("#stableNote").textContent = left
-    ? `Rijdt nu: ${UNI[p.pick][0]}. Nog ${left} eenhoorns te vinden. Elke keer dat je het kasteel haalt, komt er eentje bij.`
+    ? `Rijdt nu: ${UNI[p.pick][0]}. Nog ${left} eenhoorns te vinden. Haal het kasteel, misschien wacht er een nieuwe op je!`
     : `Rijdt nu: ${UNI[p.pick][0]}. Je hebt ze allemaal gevonden!`;
   const badges = Object.keys(p.badges).sort((a, b) => a.slice(1) - b.slice(1) || a.localeCompare(b));
   $("#badges").innerHTML = badges.map(k => `<span class="badge">${badgeLabel(k)}</span>`).join("");
@@ -203,7 +203,7 @@ function play(worldId, cfg){
   const tempo = ws.mode === "tempo";
   last = { worldId, cfg, mode: ws.mode, count: state.tempo.count, seconds: state.tempo.seconds };
   startSession({
-    world: W, mode: ws.mode, seconds: state.tempo.seconds, filter: UNI[p.pick][1], crown: p.crown,
+    world: W, mode: ws.mode, seconds: state.tempo.seconds, riderHTML: uniHTML(p, p.pick),
     queue: tempo ? tempoQueue(facts, state.tempo.count) : buildQueue(facts, ws.stats, ws.len),
     onAnswer: (f, ok, ms) => { recordAttempt(ws.stats, f.key, ok, ms); persist(); },
     onEnd: res => finish(res),
@@ -231,7 +231,7 @@ function newBadges(p){
 function finish(res){
   const p = player(), l = last, news = [];
   p.rounds++;
-  let party = false, shownUni = p.pick, title, stats, missed, missedTitle;
+  let party = false, title, stats, missed, missedTitle, stars, newRecord = false;
 
   if (res.mode === "tempo"){
     const key = tempoKey({ world: l.worldId, level: l.cfg.level, tables: l.cfg.tables, ops: l.cfg.ops, count: l.count, seconds: l.seconds });
@@ -241,31 +241,42 @@ function finish(res){
     stats = `${res.correct} juist, ${res.wrong} fout in ${fmtTime(res.ms)}` + (res.done < res.total ? ` (${res.done} van de ${res.total} gemaakt)` : "");
     if (betterRecord(result, rec)){
       p.records[key] = { ...result, label: recordLabel(l), at: Date.now() };
-      p.crown = true; party = true;
-      news.push("👑 Nieuw record!");
+      p.crown = true; grantCrown(p); party = true; newRecord = true;
+      news.push("👑 Nieuw record! Je kroontje hangt in je kast.");
     } else if (rec) {
       news.push(`Je record: ${rec.correct} juist in ${fmtTime(rec.ms)}`);
     }
     missed = res.wrongList; missedTitle = "Deze waren fout:";
+    stars = res.timedOut ? 0 : 3;
     $("#endStars").innerHTML = "";
   } else {
     const acc = res.first / res.total;
-    const stars = acc >= .9 ? 3 : acc >= .7 ? 2 : 1;
+    stars = acc >= .9 ? 3 : acc >= .7 ? 2 : 1;
     if (l.worldId === "plusmin") p.worlds.plusmin.best[l.cfg.level] = Math.max(p.worlds.plusmin.best[l.cfg.level] || 0, stars);
-    let newUni = null;
-    if (p.unicorns < UNI.length){ newUni = p.unicorns; p.unicorns++; p.pick = newUni; shownUni = newUni; }
-    title = newUni !== null ? `Nieuw in je stal: ${UNI[newUni][0]}!` : "Kasteel gehaald!";
+    title = "Kasteel gehaald!";
     stats = `${res.first} van de ${res.total} meteen juist` + (res.fast ? `, ${res.fast} keer bliksemsnel ⚡` : "");
     missed = res.missed; missedTitle = "Deze oefenen we nog eens:";
     $("#endStars").innerHTML = starStr(stars);
   }
 
-  if (l.worldId === "tafels") for (const k of newBadges(p)){ news.push(`Nieuw kroontje: ${badgeLabel(k)}`); party = true; }
+  const badges = l.worldId === "tafels" ? newBadges(p) : [];
+  for (const k of badges){ news.push(`Nieuw kroontje: ${badgeLabel(k)}`); party = true; }
+
+  const gained = glittersFor({ mode: res.mode, stars, timedOut: res.timedOut, newRecord, newBadges: badges.length });
+  p.glitters += gained;
+  news.push(`+${gained} ✨ Je hebt nu ${p.glitters} glitters.`);
+
+  // Only a finished round can bring a unicorn: practice always, tempo when everything was done in time.
+  if (p.unicorns < UNI.length && (res.mode !== "tempo" || !res.timedOut)){
+    if (rollUnicorn(stars, p.dry)){
+      p.pick = p.unicorns++; p.dry = 0; party = true;
+      title = `Nieuw in je stal: ${UNI[p.pick][0]}!`;
+    } else p.dry++;
+  }
   persist();
 
   const u = $("#endUni");
-  u.style.filter = UNI[shownUni][1];
-  u.classList.toggle("crowned", p.crown);
+  u.innerHTML = uniHTML(p, p.pick);
   u.style.animation = "none"; void u.offsetWidth; u.style.animation = "";
   $("#endTitle").textContent = title;
   $("#endStats").textContent = stats;
